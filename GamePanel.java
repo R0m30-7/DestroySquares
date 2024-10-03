@@ -106,7 +106,7 @@ public class GamePanel extends JPanel {
         g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
         g.setColor(Color.WHITE);
         g.drawRect(mouseX - 4, mouseY - 4, 8, 8);
-        g.fillRect(mouseX - 1, mouseY - 1, 2, 2);
+        g.fillRect(mouseX - 1, mouseY - 1, 3, 3);
     }
 
     public static void setPaused(boolean isPaused) {
