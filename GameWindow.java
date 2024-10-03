@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class GameWindow {
-    private static JFrame jFrame;
+    protected static JFrame jFrame;
 
     public GameWindow(GamePanel gamePanel) {
         jFrame = new JFrame();

@@ -6,7 +6,6 @@ public class Game implements Runnable {
     protected GamePanel gamePanel;
     protected Thread gameThread;
     protected final static int FPSGoal = 60;
-    protected static boolean isPaused = false;
 
     protected static int xLoc = 0; // ? Mi dice le coordinate del punto in
     protected static int yLoc = 0; // ? alto a sinistra del gamePanel
@@ -39,9 +38,7 @@ public class Game implements Runnable {
             // FPS counter
             now = System.nanoTime();
             if (now - lastFrame > timePerFrame) {
-                if(!isPaused){
-                    gamePanel.repaint();
-                }
+                gamePanel.repaint();
                 lastFrame = now;
             }
 
@@ -65,13 +62,5 @@ public class Game implements Runnable {
 
     public static int getyLoc() {
         return yLoc;
-    }
-
-    public static boolean getisPaused(){
-        return isPaused;
-    }
-
-    public static void setPaused(boolean isPaused) {
-        Game.isPaused = isPaused;
     }
 }

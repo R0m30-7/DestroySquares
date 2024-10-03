@@ -15,8 +15,16 @@ public class GamePanel extends JPanel {
     protected static int mouseY = 0;
     protected static int FPSToDisplay = 0;  //? Visualizzo gli FPS a schermo
     private static long lastSec = System.nanoTime();    //? Salva il secondo precedente
+    private int cicli = 0;
+    protected static boolean isPaused = false;
 
-    int cicli = 0;
+    protected static int caso = 1;
+    /*
+     * Caso = 0: Menù iniziale
+     * Caso = 1: Momento gaming
+     * Caso = 2: Pausa
+     * Caso = 4: Potenziamenti
+    */
 
     public GamePanel() {
         setPanelSize();
@@ -37,6 +45,21 @@ public class GamePanel extends JPanel {
 
         //? Disegno le scritte
         WriteTextOnScreen(g);
+        
+        switch (caso) {
+            case 0: // Menù iniziale
+                DrawMenu(g);
+                break;
+            case 1: // Momento gaming
+                DrawGame(g);
+                break;
+            case 2: // Pausa
+                DrawPause(g);
+                break;
+            case 3: // Potenziamenti
+                DrawUpgrades(g);
+                break;
+        }
 
         if (System.nanoTime() - lastSec > 1000000000) { // ? Entro in questo if una volta al secondo
             lastSec = System.nanoTime();
@@ -49,6 +72,41 @@ public class GamePanel extends JPanel {
         }
 
         cicli++;
+    }
+
+    private void DrawMenu(Graphics g){
+        //? Tre pulsanti "Play", "Upgrades", "Quit Game"
+    }
+
+    private void DrawGame(Graphics g){
+        DrawMouseRectangle(g);
+    }
+
+    private void DrawPause(Graphics g){
+        int width = 100, height = 50;
+        //? Tre semplici pulsanti con scritto "Resume", "Quit to title", "Quit Game"
+        g.setColor(Color.GRAY);
+        g.fillRect(panelWidth / 2 - width / 2, panelHeight / 2 - height / 2, width, height);
+    }
+
+    private void DrawUpgrades(Graphics g){
+
+    }
+
+    private void DrawMouseRectangle(Graphics g){
+        int width = 100, height = 100;
+
+        g.setColor(new Color(122, 226, 255));
+        g.fillRect(mouseX - width / 2, mouseY - height / 2, width, height);
+        g.setColor(new Color(0, 98, 255));
+        g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
+        width = width - 2;
+        height = height - 2;
+        g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
+    }
+
+    public static void setPaused(boolean isPaused) {
+        GamePanel.isPaused = isPaused;
     }
 
     private void WriteTextOnScreen(Graphics g){

@@ -41,7 +41,7 @@ public class MouseInput implements MouseInputListener, MouseWheelListener {
     
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        int rot = e.getWheelRotation();
+        //int rot = e.getWheelRotation();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MouseInput implements MouseInputListener, MouseWheelListener {
     public void mouseMoved(MouseEvent e) {
         xMouse = (int) MouseInfo.getPointerInfo().getLocation().getX() - Game.getxLoc();
         yMouse = (int) MouseInfo.getPointerInfo().getLocation().getY() - Game.getyLoc();
-        System.out.println(xMouse + "   " + yMouse);
+        //System.out.println(xMouse + "   " + yMouse);
     }
 
     @Override
