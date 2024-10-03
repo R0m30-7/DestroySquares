@@ -1,5 +1,3 @@
-package DestroySquares;
-
 import java.util.Random;
 
 public class Square {
