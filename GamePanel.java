@@ -44,22 +44,23 @@ public class GamePanel extends JPanel {
         mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY() - Game.getyLoc();
 
         //? Disegno le scritte
-        WriteTextOnScreen(g);
         
         switch (caso) {
             case 0: // Menù iniziale
-                DrawMenu(g);
-                break;
+            DrawMenu(g);
+            break;
             case 1: // Momento gaming
-                DrawGame(g);
-                break;
+            DrawGame(g);
+            break;
             case 2: // Pausa
-                DrawPause(g);
-                break;
+            DrawPause(g);
+            break;
             case 3: // Potenziamenti
-                DrawUpgrades(g);
-                break;
+            DrawUpgrades(g);
+            break;
         }
+        
+        WriteTextOnScreen(g);
 
         if (System.nanoTime() - lastSec > 1000000000) { // ? Entro in questo if una volta al secondo
             lastSec = System.nanoTime();
@@ -96,13 +97,16 @@ public class GamePanel extends JPanel {
     private void DrawMouseRectangle(Graphics g){
         int width = 100, height = 100;
 
-        g.setColor(new Color(122, 226, 255));
+        g.setColor(new Color(122, 226, 255, 50));
         g.fillRect(mouseX - width / 2, mouseY - height / 2, width, height);
         g.setColor(new Color(0, 98, 255));
         g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
         width = width - 2;
         height = height - 2;
         g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
+        g.setColor(Color.WHITE);
+        g.drawRect(mouseX - 4, mouseY - 4, 8, 8);
+        g.fillRect(mouseX - 1, mouseY - 1, 2, 2);
     }
 
     public static void setPaused(boolean isPaused) {
