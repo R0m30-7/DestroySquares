@@ -14,7 +14,7 @@ import java.awt.MouseInfo;
  * 1 - Tasto sinistro
  * 2 - Tasto rotella
  * 3 - Tasto destro
- */
+*/
 
 public class MouseInput implements MouseInputListener, MouseWheelListener {
 
@@ -30,7 +30,7 @@ public class MouseInput implements MouseInputListener, MouseWheelListener {
 
         //? Considero il tasto destro
         if(e.getButton() == 3){
-
+            
         }
     }
 
