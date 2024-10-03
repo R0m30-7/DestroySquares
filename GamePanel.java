@@ -50,11 +50,11 @@ public class GamePanel extends JPanel {
         switch (scena) {
             case 0: // Menù iniziale
                 DrawMenu(g);
-                spawned = false;
+                spawned = false;    //! Debug
             break;
             case 1: // Momento gaming
                 DrawGame(g);
-                if(!spawned){
+                if(!spawned){   //! Debug
                     Square square = new Square(g);
                     spawned = true;
                 }
@@ -109,7 +109,7 @@ public class GamePanel extends JPanel {
     }
 
     private void MoveEnemies(Graphics g){
-        square.Move();
+        square.Move();  //! Debug
     }
 
     private void DrawMouseRectangle(Graphics g){
