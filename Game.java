@@ -1,5 +1,8 @@
 package ProgettiMiei.Java.DestroySquares;
 
+import java.awt.*;
+import java.swing.*;
+
 public class Game implements Runnable {
 
     protected GameWindow gameWindow;
@@ -40,6 +43,21 @@ public class Game implements Runnable {
             if (now - lastFrame > timePerFrame) {
                 gamePanel.repaint();
                 lastFrame = now;
+            }
+
+            //? Nascondo il cursore
+            if(GamePanel.caso == 1){
+                Toolkit toolkit = Toolkit.getDefaultToolkit();
+                Image immagine = toolkit.createImage("");
+                Point hotspot = new Point(0, 0);
+                Cursor cursoreTrasparente = toolkit.createCustomCursor(immagine, hotspot, "Cursore Trasparente");
+                GameWindow.jFrame.setCursor(cursoreTrasparente);
+            } else{
+                Toolkit toolkit = Toolkit.getDefaultToolkit();
+                Image immagine = toolkit.getImage("cursor.png"); // Sostituisci con il percorso della tua immagine
+                Point hotspot = new Point(0, 0);
+                Cursor cursorePersonalizzato = toolkit.createCustomCursor(immagine, hotspot, "Cursore Personalizzato");
+                GameWindow.jFrame.setCursor(cursorePersonalizzato);
             }
 
             if (now - lastCheck >= 1000000000) {
