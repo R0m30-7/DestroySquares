@@ -1,4 +1,4 @@
-package ProgettiMiei.Java.DestroySquares;
+package DestroySquares;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
     private int cicli = 0;
     protected static boolean isPaused = false;
 
-    protected static int caso = 2;
+    protected static int scena = 0;
     /*
      * Caso = 0: Menù iniziale
      * Caso = 1: Momento gaming
@@ -45,18 +45,18 @@ public class GamePanel extends JPanel {
 
         //? Disegno le scritte
         
-        switch (caso) {
+        switch (scena) {
             case 0: // Menù iniziale
-            DrawMenu(g);
+                DrawMenu(g);
             break;
             case 1: // Momento gaming
-            DrawGame(g);
+                DrawGame(g);
             break;
             case 2: // Pausa
-            DrawPause(g);
+                DrawPause(g);
             break;
             case 3: // Potenziamenti
-            DrawUpgrades(g);
+                DrawUpgrades(g);
             break;
         }
         
@@ -117,5 +117,6 @@ public class GamePanel extends JPanel {
         g.setColor(Color.WHITE);
         g.drawString("Dimension: " + panelWidth + " x " + panelHeight, 3, 15);
         g.drawString("FPS: " + FPSToDisplay, panelWidth - 45, 15);
+        g.drawString("Scena: " + scena, panelWidth - 50, 30);
     }
 }

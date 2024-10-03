@@ -1,4 +1,4 @@
-package ProgettiMiei.Java.DestroySquares;
+package DestroySquares;
 
 import java.awt.*;
 import java.swing.*;
@@ -46,7 +46,7 @@ public class Game implements Runnable {
             }
 
             //? Nascondo il cursore
-            if(GamePanel.caso == 1){
+            if(GamePanel.scena == 1){
                 Toolkit toolkit = Toolkit.getDefaultToolkit();
                 Image immagine = toolkit.createImage("");
                 Point hotspot = new Point(0, 0);

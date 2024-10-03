@@ -1,4 +1,4 @@
-package ProgettiMiei.Java.DestroySquares;
+package DestroySquares;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
