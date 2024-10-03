@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
     private int cicli = 0;
     protected static boolean isPaused = false;
 
-    protected static int caso = 1;
+    protected static int caso = 2;
     /*
      * Caso = 0: Menù iniziale
      * Caso = 1: Momento gaming
