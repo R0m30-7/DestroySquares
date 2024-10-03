@@ -25,6 +25,8 @@ public class GamePanel extends JPanel {
      * Caso = 2: Pausa
      * Caso = 4: Potenziamenti
     */
+    
+    boolean spawned = false;
 
     public GamePanel() {
         setPanelSize();
@@ -48,9 +50,14 @@ public class GamePanel extends JPanel {
         switch (scena) {
             case 0: // Menù iniziale
                 DrawMenu(g);
+                spawned = false;
             break;
             case 1: // Momento gaming
                 DrawGame(g);
+                if(!spawned){
+                    Square square = new Square(g);
+                    spawned = true;
+                }
             break;
             case 2: // Pausa
                 DrawPause(g);
@@ -81,6 +88,9 @@ public class GamePanel extends JPanel {
 
     private void DrawGame(Graphics g){
         DrawMouseRectangle(g);
+
+        SpawnEnemies(g);
+        MoveEnemies(g);
     }
 
     private void DrawPause(Graphics g){
@@ -92,6 +102,14 @@ public class GamePanel extends JPanel {
 
     private void DrawUpgrades(Graphics g){
 
+    }
+
+    private void SpawnEnemies(Graphics g){
+        
+    }
+
+    private void MoveEnemies(Graphics g){
+        square.Move();
     }
 
     private void DrawMouseRectangle(Graphics g){
