@@ -1,6 +1,8 @@
 package DestroySquares;
 
 import java.util.Random;
+import java.awt.Graphics;
+import java.awt.Color;
 
 public class Square {
     Graphics g;
@@ -8,16 +10,25 @@ public class Square {
 
     int x, y;
     int xGoal, yGoal;
-    int width, height;
+    int width = 50, height = 50;
     int lifePoints;
-    double speed;
+    double speed, velX, velY;
     double maxVel = 100, minVel = 10;
 
     public Square(Graphics g){
 
         this.speed = random.nextDouble(maxVel - minVel + 1) + minVel;
-        GenerateSpawn(this);
-        GeneratePosGoal(this);
+        GenerateSpawn();
+        GeneratePosGoal();
+
+        //! Cambiare il calcolo dell'angolo perché non funziona
+        double theta = Math.atan2(yGoal - y, xGoal - x);
+        velX = speed * Math.cos(theta);
+        velY = speed * Math.sin(theta);
+        
+        System.out.println("Spawn: " + x + " || " + y);
+        System.out.println("Vel: " + (float) speed + " || " + (float) velX + " || " + (float) velY);
+        System.out.println("Theta: " + (float) Math.toDegrees(theta) + "\n");
     }
 
     protected void draw(Graphics g){
@@ -28,30 +39,44 @@ public class Square {
         width = width - 2;
         height = height - 2;
         g.drawRect(x - width / 2, y - height / 2, width, height);
+        width = width + 2;
+        height = height + 2;
     }
 
-    protected void Move(){
-        if(x < xGoal){
-            x += speed / Game.getFPSGoal();
-        } else{
-            x -= speed / Game.getFPSGoal();
+    protected void Move(Graphics g){
+        x += velX / Game.getFPSGoal();
+        y += velY / Game.getFPSGoal();
+
+        g.setColor(Color.WHITE);
+        g.drawString(x + " || " + y, x, y);
+    }
+
+    private void GenerateSpawn(){
+        int bound = 20;
+
+        if(random.nextBoolean()){
+            if(random.nextBoolean()){
+                //? x < 0
+                x = - (random.nextInt(bound) + width / 2);
+            } else{
+                //? x > panelWidth
+                x = random.nextInt(bound) + GamePanel.panelWidth + width / 2;
+            }
+            y = random.nextInt(GamePanel.panelHeight)  + height / 2;
+        } else {
+            if(random.nextBoolean()){
+                //? y < 0
+                y = - (random.nextInt(bound) + height / 2);
+            } else{
+                //? y > panelHeight
+                y = random.nextInt(bound) + GamePanel.panelHeight + height / 2;
+            }
+            x = random.nextInt(GamePanel.panelWidth) + width / 2;
         }
-        if(y < yGoal){
-            y += speed / Game.getFPSGoal();
-        } else{
-            y -= speed / Game.getFPSGoal();
-        }
     }
 
-    private GenerateSpawn(Square a){
-        int xMax = -width / 2, xMin = -(10 + width / 2);
-        int yMax = -height / 2, yMin = -(10 + height / 2);
-        a.x = random.nextInt(xMax - xMin + 1) + xMin;
-        a.y = random.nextInt(yMax - yMin + 1) + yMin;
-    }
-
-    private GeneratePosGoal(Square a){
-        a.xGoal = GamePanel.panelWidth / 2;
-        a.yGoal = GamePanel.panelHeight / 2;
+    private void GeneratePosGoal(){
+        xGoal = GamePanel.panelWidth / 2;
+        yGoal = GamePanel.panelHeight / 2;
     }
 }
