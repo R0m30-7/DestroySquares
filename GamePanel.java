@@ -1,9 +1,12 @@
 package DestroySquares;
+import Square.java;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -25,8 +28,8 @@ public class GamePanel extends JPanel {
      * Caso = 2: Pausa
      * Caso = 4: Potenziamenti
     */
-    
-    boolean spawned = false;
+
+    List<Square> Enemies = new ArrayList<>();
 
     public GamePanel() {
         setPanelSize();
@@ -45,19 +48,18 @@ public class GamePanel extends JPanel {
         mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX() - Game.getxLoc();
         mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY() - Game.getyLoc();
 
+        g.setColor(Color.WHITE);
+        g.fillOval(panelWidth/2 - 1, panelHeight/2 - 1, 3, 3);
+
         //? Disegno le scritte
         
         switch (scena) {
             case 0: // Menù iniziale
                 DrawMenu(g);
-                spawned = false;    //! Debug
+                Enemies.clear();;    //! Debug
             break;
             case 1: // Momento gaming
                 DrawGame(g);
-                if(!spawned){   //! Debug
-                    Square square = new Square(g);
-                    spawned = true;
-                }
             break;
             case 2: // Pausa
                 DrawPause(g);
@@ -90,6 +92,7 @@ public class GamePanel extends JPanel {
         DrawMouseRectangle(g);
 
         SpawnEnemies(g);
+        DrawEnemies(g);
         MoveEnemies(g);
     }
 
@@ -105,11 +108,21 @@ public class GamePanel extends JPanel {
     }
 
     private void SpawnEnemies(Graphics g){
-        
+        if(Enemies.size() == 0){   //! Debug
+            Enemies.add(new Square(g));
+        }
+    }
+
+    private void DrawEnemies(Graphics g){
+        for(int i = 0; i < Enemies.size(); i++){
+            Enemies.get(i).draw(g);
+        }
     }
 
     private void MoveEnemies(Graphics g){
-        square.Move();  //! Debug
+        for(int i = 0; i < Enemies.size(); i++){
+            Enemies.get(i).Move(g);
+        }
     }
 
     private void DrawMouseRectangle(Graphics g){
