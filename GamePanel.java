@@ -78,6 +78,10 @@ public class GamePanel extends JPanel {
             panelWidth = (int) GameWindow.getjFrameSize().getWidth() - 16;
             panelHeight = (int) GameWindow.getjFrameSize().getHeight() - 39;
 
+            if(scena == 1){
+                SpawnEnemies(g);
+            }
+
             cicli = 0;
         }
 
@@ -91,7 +95,6 @@ public class GamePanel extends JPanel {
     private void DrawGame(Graphics g){
         DrawMouseRectangle(g);
 
-        SpawnEnemies(g);
         DrawEnemies(g);
         MoveEnemies(g);
     }
@@ -108,9 +111,7 @@ public class GamePanel extends JPanel {
     }
 
     private void SpawnEnemies(Graphics g){
-        if(Enemies.size() == 0){   //! Debug
-            Enemies.add(new Square(g));
-        }
+        Enemies.add(new Square(g));
     }
 
     private void DrawEnemies(Graphics g){
