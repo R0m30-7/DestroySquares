@@ -34,7 +34,7 @@ public class GamePanel extends JPanel {
     public GamePanel() {
         setPanelSize();
 
-        this.setBackground(Color.DARK_GRAY);
+        this.setBackground(new Color(23, 23, 23));
     }
 
     private void setPanelSize() {
@@ -47,9 +47,6 @@ public class GamePanel extends JPanel {
         
         mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX() - Game.getxLoc();
         mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY() - Game.getyLoc();
-
-        g.setColor(Color.WHITE);
-        g.fillOval(panelWidth/2 - 1, panelHeight/2 - 1, 3, 3);
 
         //? Disegno le scritte
         
@@ -102,6 +99,7 @@ public class GamePanel extends JPanel {
     private void DrawPause(Graphics g){
         int width = 100, height = 50;
         //? Tre semplici pulsanti con scritto "Resume", "Quit to title", "Quit Game"
+        DrawEnemies(g);
         g.setColor(Color.GRAY);
         g.fillRect(panelWidth / 2 - width / 2, panelHeight / 2 - height / 2, width, height);
     }
@@ -116,7 +114,11 @@ public class GamePanel extends JPanel {
 
     private void DrawEnemies(Graphics g){
         for(int i = 0; i < Enemies.size(); i++){
-            Enemies.get(i).draw(g);
+            if(Enemies.get(i).HasToDespawn(g)){
+                Enemies.remove(i);
+            } else{
+                Enemies.get(i).draw(g);
+            }
         }
     }
 
@@ -148,6 +150,8 @@ public class GamePanel extends JPanel {
     private void WriteTextOnScreen(Graphics g){
         g.setColor(Color.WHITE);
         g.drawString("Dimension: " + panelWidth + " x " + panelHeight, 3, 15);
+        g.drawString("Enemies on screen: " + Enemies.size(), 3, 30);
+
         g.drawString("FPS: " + FPSToDisplay, panelWidth - 45, 15);
         g.drawString("Scena: " + scena, panelWidth - 50, 30);
     }
