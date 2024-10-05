@@ -13,6 +13,12 @@ public class Game implements Runnable {
     protected static int xLoc = 0; // ? Mi dice le coordinate del punto in
     protected static int yLoc = 0; // ? alto a sinistra del gamePanel
 
+    private int lastScena = GamePanel.scena;
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Point hotspot = new Point(0, 0);
+    Image immagine;
+    Cursor cursorePersonalizzato;
+
     public Game() {
         gamePanel = new GamePanel();
         gameWindow = new GameWindow(gamePanel);
@@ -43,21 +49,21 @@ public class Game implements Runnable {
             if (now - lastFrame > timePerFrame) {
                 gamePanel.repaint();
                 lastFrame = now;
-            }
 
-            //? Nascondo il cursore
-            if(GamePanel.scena == 1){
-                Toolkit toolkit = Toolkit.getDefaultToolkit();
-                Image immagine = toolkit.createImage("");
-                Point hotspot = new Point(0, 0);
-                Cursor cursoreTrasparente = toolkit.createCustomCursor(immagine, hotspot, "Cursore Trasparente");
-                GameWindow.jFrame.setCursor(cursoreTrasparente);
-            } else{
-                Toolkit toolkit = Toolkit.getDefaultToolkit();
-                Image immagine = toolkit.getImage("cursor.png"); // Sostituisci con il percorso della tua immagine
-                Point hotspot = new Point(0, 0);
-                Cursor cursorePersonalizzato = toolkit.createCustomCursor(immagine, hotspot, "Cursore Personalizzato");
-                GameWindow.jFrame.setCursor(cursorePersonalizzato);
+                if(lastScena != GamePanel.scena){   //? Serve per capire qundo cambio scena così da poter cambiare cursore
+                    lastScena = GamePanel.scena;
+                    System.out.println("Cambio cursore");
+
+                    //? Nascondo il cursore
+                    if(GamePanel.scena == 1){
+                        immagine = toolkit.createImage("");
+                        cursorePersonalizzato = toolkit.createCustomCursor(immagine, hotspot, "Cursore Trasparente");
+                    } else{
+                        immagine = toolkit.getImage("cursor.png");
+                        cursorePersonalizzato = toolkit.createCustomCursor(immagine, hotspot, "Cursore Personalizzato");
+                    }
+                    GameWindow.jFrame.setCursor(cursorePersonalizzato);
+                }
             }
 
             if (now - lastCheck >= 1000000000) {
