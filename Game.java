@@ -13,7 +13,7 @@ public class Game implements Runnable {
     protected static int xLoc = 0; // ? Mi dice le coordinate del punto in
     protected static int yLoc = 0; // ? alto a sinistra del gamePanel
 
-    private int lastScena = GamePanel.scena;
+    private int lastScena = -1;
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Point hotspot = new Point(0, 0);
     Image immagine;
