@@ -5,15 +5,17 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class Square {
-    Graphics g;
-    Random random = new Random();
+    private Graphics g;
+    private Random random = new Random();
 
-    int x, y;
-    int xGoal, yGoal;
-    int width = 50, height = 50;
-    int lifePoints;
-    double speed, velX, velY;
-    double maxVel = 100, minVel = 10;
+    private double x, y;
+    private int xGoal, yGoal;
+    private int width = 50, height = 50;            //TODO Da impostare tramite costruttore
+    private int lifePoints, maxLifePoints = 100;    //TODO Da impostare tramite costruttore
+    private double speed, velX, velY;
+    private double maxVel = 100, minVel = 38;
+    private boolean canDespawn = false;
+    private boolean canDropLoot = false;
 
     public Square(Graphics g){
 
@@ -21,34 +23,60 @@ public class Square {
         GenerateSpawn();
         GeneratePosGoal();
 
-        //! Cambiare il calcolo dell'angolo perché non funziona
+        lifePoints = random.nextInt(maxLifePoints) + 1; //! Da cambiare in lifePoints = maxLifePoints
+
         double theta = Math.atan2(yGoal - y, xGoal - x);
         velX = speed * Math.cos(theta);
         velY = speed * Math.sin(theta);
         
-        System.out.println("Spawn: " + x + " || " + y);
+        /* System.out.println("Spawn: " + x + " || " + y);
         System.out.println("Vel: " + (float) speed + " || " + (float) velX + " || " + (float) velY);
-        System.out.println("Theta: " + (float) Math.toDegrees(theta) + "\n");
+        System.out.println("Theta: " + (float) Math.toDegrees(theta) + "\n"); */
     }
 
     protected void draw(Graphics g){
         g.setColor(new Color(255, 68, 25, 50));
-        g.fillRect(x - width / 2, y - height / 2, width, height);
+        g.fillRect((int) x - width / 2, (int) y - height / 2, width, height * lifePoints / maxLifePoints);
+
         g.setColor(new Color(156, 8, 0));
-        g.drawRect(x - width / 2, y - height / 2, width, height);
-        width = width - 2;
-        height = height - 2;
-        g.drawRect(x - width / 2, y - height / 2, width, height);
-        width = width + 2;
-        height = height + 2;
+        g.drawRect((int) x - width / 2, (int) y - height / 2, width, height);
+        width = width - 2; height = height - 2;
+        g.drawRect((int) x - width / 2, (int) y - height / 2, width, height);
+        width = width + 2; height = height + 2;
+
+        if(lifePoints <= 0){
+            canDespawn = true;
+            canDropLoot = true;
+        }
     }
 
     protected void Move(Graphics g){
         x += velX / Game.getFPSGoal();
         y += velY / Game.getFPSGoal();
 
-        g.setColor(Color.WHITE);
-        g.drawString(x + " || " + y, x, y);
+        CheckForDespawn();
+    }
+
+    private void DropLoot(Graphics g){  //TODO Droppare loot
+        System.out.println("Droppo loot");
+    }
+
+    private void CheckForDespawn(){
+        if((int) x <= xGoal + width && (int) x >= xGoal - width){
+            canDespawn = true;
+        }
+    }
+
+    protected boolean HasToDespawn(Graphics g){
+        if(canDespawn){
+            if(x > GamePanel.panelWidth + width / 2 || x < -width / 2 || y > GamePanel.panelHeight + height / 2 || y < -height / 2){
+                return true;
+            } else if(canDropLoot){
+                DropLoot(g);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void GenerateSpawn(){
@@ -76,7 +104,7 @@ public class Square {
     }
 
     private void GeneratePosGoal(){
-        xGoal = GamePanel.panelWidth / 2;
-        yGoal = GamePanel.panelHeight / 2;
+        xGoal = random.nextInt(GamePanel.panelWidth);
+        yGoal = random.nextInt(GamePanel.panelHeight);
     }
 }
