@@ -8,7 +8,7 @@ public class Game implements Runnable {
     protected GameWindow gameWindow;
     protected GamePanel gamePanel;
     protected Thread gameThread;
-    protected final static int FPSGoal = 60;
+    protected final static int FPSGoal = 90;
 
     protected static int xLoc = 0; // ? Mi dice le coordinate del punto in
     protected static int yLoc = 0; // ? alto a sinistra del gamePanel
