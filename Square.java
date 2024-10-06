@@ -5,19 +5,22 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class Square {
-    private Graphics g;
     private Random random = new Random();
 
     private double x, y;
     private int xGoal, yGoal;
-    private int width, height;
-    private int lifePoints, maxLifePoints;
     private double speed, velX, velY;
     private double maxVel = 100, minVel = 38;
+
+    private int width, height;
+
+    private double lifePoints, maxLifePoints;
+    private double squareDamage;
+    
     private boolean canDespawn = false;
     private boolean canDropLoot = false;
 
-    public Square(Graphics g){
+    public Square(){
 
         GenerateSpawn();
         GeneratePosGoal();
@@ -30,7 +33,7 @@ public class Square {
 
     protected void draw(Graphics g){
         g.setColor(new Color(255, 68, 25, 50));
-        g.fillRect((int) x - width / 2, (int) y - height / 2, width, height * lifePoints / maxLifePoints);
+        g.fillRect((int) x - width / 2, (int) y - height / 2, width, (int) (height * lifePoints / maxLifePoints));
 
         g.setColor(new Color(156, 8, 0));
         g.drawRect((int) x - width / 2, (int) y - height / 2, width, height);
@@ -59,9 +62,10 @@ public class Square {
         width = 50;
         height = width;
 
-        // Imposto la vita
+        // Imposto la vita e il danno del quadrato quando viene hittato
         maxLifePoints = 100;
         lifePoints = maxLifePoints;
+        squareDamage = 10;
         //lifePoints = random.nextInt(maxLifePoints) + 1;
 
         // Imposto le velocità
@@ -120,5 +124,29 @@ public class Square {
     private void GeneratePosGoal(){
         xGoal = random.nextInt(GamePanel.panelWidth);
         yGoal = random.nextInt(GamePanel.panelHeight);
+    }
+
+    protected void TakeDamage(double damage){
+        lifePoints -= damage;
+    }
+
+    protected double DoDamage(){
+        return squareDamage;
+    }
+
+    protected double getX() {
+        return x;
+    }
+
+    protected double getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
