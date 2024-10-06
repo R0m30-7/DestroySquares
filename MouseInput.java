@@ -25,7 +25,7 @@ public class MouseInput implements MouseInputListener, MouseWheelListener {
     public void mousePressed(MouseEvent e) {
         // ? Considero il tasto sinistro
         if (e.getButton() == 1) {
-
+            GamePanel.Hit();
         }
 
         //? Considero il tasto destro
