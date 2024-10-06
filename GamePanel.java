@@ -1,5 +1,4 @@
 package DestroySquares;
-import Square.java;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.awt.FontMetrics;
+import java.awt.Font;
 
 import javax.swing.JPanel;
 
@@ -32,9 +34,17 @@ public class GamePanel extends JPanel {
     private static List<Square> Enemies = new ArrayList<>();
 
     //? Variabili player
-    private static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
+    protected static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
     private static double playerDamage = 20;
     private static int mouseWidth = 100, mouseHeight = 100;
+    protected static boolean dead = false;
+
+    //? Font
+    private Font originalFont;
+    private String text;
+    private int textSize;
+    private Font font;
+    private FontMetrics metrics;
 
     public GamePanel() {
         setPanelSize();
@@ -48,6 +58,7 @@ public class GamePanel extends JPanel {
     }
 
     public void paintComponent(Graphics g) { // Scrivo in questo void le cose che voglio disegnare
+        originalFont = g.getFont();
         super.paintComponent(g);
         
         mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX() - Game.getxLoc();
@@ -59,15 +70,22 @@ public class GamePanel extends JPanel {
             case 0: // Menù iniziale
                 DrawMenu(g);
                 Enemies.clear();;    //! Debug
+                InizializeAttributes();
             break;
             case 1: // Momento gaming
                 DrawGame(g);
+                if(dead){
+                    scena = 4;
+                }
             break;
             case 2: // Pausa
                 DrawPause(g);
             break;
             case 3: // Potenziamenti
                 DrawUpgrades(g);
+            break;
+            case 4: // Morto
+                DrawDeathScreen(g);
             break;
         }
         
@@ -115,9 +133,13 @@ public class GamePanel extends JPanel {
 
             if(collides){
                 enemy.TakeDamage(playerDamage);
-                playerHealth -= enemy.DoDamage();
             }
         }
+    }
+
+    private void InizializeAttributes(){    // Imposto ad originali tutte le variabili quando inizio a giocare
+        playerHealth = playerMaxHealth;
+        dead = false;
     }
 
     private void DrawMenu(Graphics g){
@@ -128,18 +150,33 @@ public class GamePanel extends JPanel {
         DrawEnemies(g);
         DrawMouseRectangle(g);
         MoveEnemies(g);
+        DrawPlayerLife(g);
     }
 
     private void DrawPause(Graphics g){
         int width = 100, height = 50;
         //? Tre semplici pulsanti con scritto "Resume", "Quit to title", "Quit Game"
+
         DrawEnemies(g);
+        DrawPlayerLife(g);
+
         g.setColor(Color.GRAY);
         g.fillRect(panelWidth / 2 - width / 2, panelHeight / 2 - height / 2, width, height);
     }
 
     private void DrawUpgrades(Graphics g){
 
+    }
+
+    private void DrawDeathScreen(Graphics g){
+        textSize = 48;
+        font = new Font("Arial", Font.BOLD, textSize);
+        metrics = g.getFontMetrics(font);
+        g.setFont(font);
+
+        text = "Sei Morto!";
+        g.setColor(Color.RED);
+        g.drawString(text, panelWidth / 2 - metrics.stringWidth(text) / 2, panelHeight / 2 - textSize / 2);
     }
 
     private void SpawnEnemies(Graphics g){
@@ -160,6 +197,24 @@ public class GamePanel extends JPanel {
         for(int i = 0; i < Enemies.size(); i++){
             Enemies.get(i).Move(g);
         }
+    }
+
+    private void DrawPlayerLife(Graphics g){
+        int xStart = 15;
+        int yStart = 15;
+        int width = 150, height = 30;
+        textSize = 18;
+        font = new Font("Arial", Font.BOLD, textSize);
+        metrics = g.getFontMetrics(font);
+        
+        g.setFont(font);
+        g.setColor(Color.RED);
+        g.fillRect(xStart, yStart, (int) (width * playerHealth / playerMaxHealth), height);
+        g.setColor(new Color(55, 0, 0));
+        g.drawRect(xStart, yStart, width, height);
+        g.setColor(Color.WHITE);
+        text = playerHealth + "/" + playerMaxHealth;
+        g.drawString(text, xStart + (width / 2) - metrics.stringWidth(text) / 2, (int) (2.5 * yStart));
     }
 
     private void DrawMouseRectangle(Graphics g){
@@ -183,11 +238,18 @@ public class GamePanel extends JPanel {
     }
 
     private void WriteTextOnScreen(Graphics g){
-        g.setColor(Color.WHITE);
-        g.drawString("Dimension: " + panelWidth + " x " + panelHeight, 3, 15);
-        g.drawString("Enemies on screen: " + Enemies.size(), 3, 30);
+        g.setFont(originalFont);
+        metrics = g.getFontMetrics(originalFont);
 
-        g.drawString("FPS: " + FPSToDisplay, panelWidth - 45, 15);
-        g.drawString("Scena: " + scena, panelWidth - 50, 30);
+        g.setColor(Color.WHITE);
+        text = "Dimension: " + panelWidth + " x " + panelHeight;
+        g.drawString(text, 3, 60);
+        text = "Enemies on screen: " + Enemies.size();
+        g.drawString(text, 3, 75);
+
+        text = "FPS: " + FPSToDisplay;
+        g.drawString(text, panelWidth - metrics.stringWidth(text), 15);
+        text = "Scena: " + scena;
+        g.drawString(text, panelWidth - metrics.stringWidth(text), 30);
     }
 }
