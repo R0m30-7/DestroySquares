@@ -91,6 +91,10 @@ public class Square {
                 return true;
             } else if(canDropLoot){
                 DropLoot(g);
+                GamePanel.playerHealth -= DoDamage();
+                if(GamePanel.playerHealth <= 0){
+                    GamePanel.dead = true;
+                }
                 return true;
             }
         }
@@ -130,7 +134,7 @@ public class Square {
         lifePoints -= damage;
     }
 
-    protected double DoDamage(){
+    private double DoDamage(){
         return squareDamage;
     }
 
