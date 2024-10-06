@@ -29,7 +29,12 @@ public class GamePanel extends JPanel {
      * Caso = 4: Potenziamenti
     */
 
-    List<Square> Enemies = new ArrayList<>();
+    private static List<Square> Enemies = new ArrayList<>();
+
+    //? Variabili player
+    private static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
+    private static double playerDamage = 20;
+    private static int mouseWidth = 100, mouseHeight = 100;
 
     public GamePanel() {
         setPanelSize();
@@ -85,6 +90,36 @@ public class GamePanel extends JPanel {
         cicli++;
     }
 
+    protected static void Hit(){
+        boolean collides = false;
+        Square enemy;
+
+        for(int i = 0; i < Enemies.size(); i++){
+            enemy = Enemies.get(i);
+            //? Devo controllare che il nemico sia dentro il quadrato del mouse, anche parzialmente
+
+            // Coordinate del quadrato enemy
+            double enemyLeft = enemy.getX() - enemy.getWidth() / 2;
+            double enemyRight = enemyLeft + enemy.getWidth();
+            double enemyTop = enemy.getY() - enemy.getHeight() / 2;
+            double enemyBottom = enemyTop + enemy.getHeight();
+
+            // Coordinate del quadrato mouse
+            double mouseLeft = mouseX - mouseWidth / 2;
+            double mouseRight = mouseX + mouseWidth / 2;
+            double mouseTop = mouseY - mouseHeight / 2;
+            double mouseBottom = mouseY + mouseHeight / 2;
+
+            // Verifica collisione
+            collides = enemyRight >= mouseLeft && enemyLeft <= mouseRight && enemyBottom >= mouseTop && enemyTop <= mouseBottom;
+
+            if(collides){
+                enemy.TakeDamage(playerDamage);
+                playerHealth -= enemy.DoDamage();
+            }
+        }
+    }
+
     private void DrawMenu(Graphics g){
         //? Tre pulsanti "Play", "Upgrades", "Quit Game"
     }
@@ -108,7 +143,7 @@ public class GamePanel extends JPanel {
     }
 
     private void SpawnEnemies(Graphics g){
-        Enemies.add(new Square(g));
+        Enemies.add(new Square());
     }
 
     private void DrawEnemies(Graphics g){
@@ -128,18 +163,19 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawMouseRectangle(Graphics g){
-        int width = 100, height = 100;
 
         g.setColor(new Color(122, 226, 255, 50));
-        g.fillRect(mouseX - width / 2, mouseY - height / 2, width, height);
+        g.fillRect(mouseX - mouseWidth / 2, mouseY - mouseHeight / 2, mouseWidth, mouseHeight);
         g.setColor(new Color(0, 98, 255));
-        g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
-        width = width - 2;
-        height = height - 2;
-        g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
+        g.drawRect(mouseX - mouseWidth / 2, mouseY - mouseHeight / 2, mouseWidth, mouseHeight);
+        mouseWidth = mouseWidth - 2;
+        mouseHeight = mouseHeight - 2;
+        g.drawRect(mouseX - mouseWidth / 2, mouseY - mouseHeight / 2, mouseWidth, mouseHeight);
         g.setColor(Color.WHITE);
         g.drawRect(mouseX - 4, mouseY - 4, 8, 8);
         g.fillRect(mouseX - 1, mouseY - 1, 3, 3);
+        mouseWidth = mouseWidth + 2;
+        mouseHeight = mouseHeight + 2;
     }
 
     public static void setPaused(boolean isPaused) {
