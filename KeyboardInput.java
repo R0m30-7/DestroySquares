@@ -41,6 +41,9 @@ public class KeyboardInput implements KeyListener {
             case 52:
                 GamePanel.scena = 3;
                 break;
+            case 53:
+                GamePanel.scena = 4;
+                break;
         }
     }
 
