@@ -52,7 +52,7 @@ public class Game implements Runnable {
 
                 if(lastScena != GamePanel.scena){   //? Serve per capire qundo cambio scena così da poter cambiare cursore
                     lastScena = GamePanel.scena;
-                    System.out.println("Cambio cursore");
+                    //! System.out.println("Cambio cursore");
 
                     //? Nascondo il cursore
                     if(GamePanel.scena == 1){
