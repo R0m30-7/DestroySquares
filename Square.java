@@ -10,8 +10,8 @@ public class Square {
 
     private double x, y;
     private int xGoal, yGoal;
-    private int width = 50, height = 50;            //TODO Da impostare tramite costruttore
-    private int lifePoints, maxLifePoints = 100;    //TODO Da impostare tramite costruttore
+    private int width, height;
+    private int lifePoints, maxLifePoints;
     private double speed, velX, velY;
     private double maxVel = 100, minVel = 38;
     private boolean canDespawn = false;
@@ -19,15 +19,9 @@ public class Square {
 
     public Square(Graphics g){
 
-        this.speed = random.nextDouble(maxVel - minVel + 1) + minVel;
         GenerateSpawn();
         GeneratePosGoal();
-
-        lifePoints = random.nextInt(maxLifePoints) + 1; //! Da cambiare in lifePoints = maxLifePoints
-
-        double theta = Math.atan2(yGoal - y, xGoal - x);
-        velX = speed * Math.cos(theta);
-        velY = speed * Math.sin(theta);
+        setAttributes();
         
         /* System.out.println("Spawn: " + x + " || " + y);
         System.out.println("Vel: " + (float) speed + " || " + (float) velX + " || " + (float) velY);
@@ -44,6 +38,9 @@ public class Square {
         g.drawRect((int) x - width / 2, (int) y - height / 2, width, height);
         width = width + 2; height = height + 2;
 
+        //TODO Fare la parte che rende i nemici "neon"
+        //? L'idea è che disegno intorno al quadrato altri quadrati rossi con colori più accesi ma quasi del tutto trasparenti
+
         if(lifePoints <= 0){
             canDespawn = true;
             canDropLoot = true;
@@ -55,6 +52,23 @@ public class Square {
         y += velY / Game.getFPSGoal();
 
         CheckForDespawn();
+    }
+
+    private void setAttributes(){
+        // Imposto le dimensioni
+        width = 50;
+        height = width;
+
+        // Imposto la vita
+        maxLifePoints = 100;
+        lifePoints = maxLifePoints;
+        //lifePoints = random.nextInt(maxLifePoints) + 1;
+
+        // Imposto le velocità
+        speed = random.nextDouble(maxVel - minVel + 1) + minVel;
+        double theta = Math.atan2(yGoal - y, xGoal - x);
+        velX = speed * Math.cos(theta);
+        velY = speed * Math.sin(theta);
     }
 
     private void DropLoot(Graphics g){  //TODO Droppare loot
