@@ -90,9 +90,8 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawGame(Graphics g){
-        DrawMouseRectangle(g);
-
         DrawEnemies(g);
+        DrawMouseRectangle(g);
         MoveEnemies(g);
     }
 
