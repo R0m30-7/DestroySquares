@@ -16,7 +16,7 @@ public class KeyboardInput implements KeyListener {
     public void keyPressed(KeyEvent e) {
         //System.out.println("PREMO UN TASTO");
         //? Se viene premuto il tasto ESC
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE && (GamePanel.scena == 1 || GamePanel.scena == 2)){   // La pausa funziona solo durante il gioco
             //System.out.println("PRONTI");
             if(!GamePanel.isPaused){
                 scenaPrec = GamePanel.scena;
