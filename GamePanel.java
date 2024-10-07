@@ -35,7 +35,7 @@ public class GamePanel extends JPanel {
 
     //? Variabili player
     protected static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
-    private static double playerDamage = 20;
+    private static double playerDamage = 100;
     private static int mouseWidth = 100, mouseHeight = 100;
     protected static boolean dead = false;
 
@@ -45,6 +45,18 @@ public class GamePanel extends JPanel {
     private int textSize;
     private Font font;
     private FontMetrics metrics;
+
+    //? Variabili per il menu
+    private static int menuWidth, menuHeight, menuSpaceBetweenRects;
+    private static int xSpawnMenu, ySpawnMenu;
+
+    //? Variabili per il menu pausa
+    private static int pauseWidth, pauseHeight, pauseSpaceBetweenRects;
+    private static int xSpawnPause, ySpawnPause;
+
+    //? Variabili per il menu DeathScreen
+    private static int deathWidth, deathHeight, DeathSpaceBetweenRects;
+    private static int xSpawnDeath, ySpawnDeath;
 
     public GamePanel() {
         setPanelSize();
@@ -98,6 +110,29 @@ public class GamePanel extends JPanel {
             panelWidth = (int) GameWindow.getjFrameSize().getWidth() - 16;
             panelHeight = (int) GameWindow.getjFrameSize().getHeight() - 39;
 
+            {   //? Aggiorno le variabili dei menu
+                //? Variabili per il menu
+                menuWidth = 360;
+                menuHeight = 85;
+                menuSpaceBetweenRects = 15;
+                xSpawnMenu = panelWidth / 2 - menuWidth / 2;
+                ySpawnMenu = panelHeight / 2 - menuHeight / 2;
+
+                //? Variabili per il menu pausa
+                pauseWidth = menuWidth;
+                pauseHeight = menuHeight;
+                pauseSpaceBetweenRects = menuSpaceBetweenRects;
+                xSpawnPause = panelWidth / 2 - menuWidth / 2;
+                ySpawnPause = panelHeight / 2 - menuHeight / 2;
+
+                //? Variabili per il menu DeathScreen
+                deathWidth = menuWidth;
+                deathHeight = menuHeight;
+                DeathSpaceBetweenRects = menuSpaceBetweenRects;
+                xSpawnDeath = panelWidth / 2 - deathWidth / 2;
+                ySpawnDeath = panelHeight / 2 - deathHeight / 2;
+            }
+
             if(scena == 1){
                 SpawnEnemies(g);
             }
@@ -110,31 +145,69 @@ public class GamePanel extends JPanel {
 
     protected static void Hit(){
         boolean collides = false;
-        Square enemy;
 
-        for(int i = 0; i < Enemies.size(); i++){
-            enemy = Enemies.get(i);
-            //? Devo controllare che il nemico sia dentro il quadrato del mouse, anche parzialmente
+        if(scena == 0){ // Menu
+            if(mouseX > xSpawnMenu && mouseX < xSpawnMenu + menuWidth){
+                if(mouseY > ySpawnMenu - menuHeight - menuSpaceBetweenRects && mouseY < ySpawnMenu - menuSpaceBetweenRects){   //? Primo rettangolo
+                    scena = 1;
+                } else if(mouseY > ySpawnMenu && mouseY < ySpawnMenu + menuHeight){ //? Secondo rettangolo
+                    scena = 3;
+                } else if(mouseY > ySpawnMenu + menuHeight + menuSpaceBetweenRects && mouseY < ySpawnMenu + 2 * menuHeight + menuSpaceBetweenRects){    //? Terzo rettangolo
+                    GameWindow.jFrame.dispose();
+                }
+            }
 
-            // Coordinate del quadrato enemy
-            double enemyLeft = enemy.getX() - enemy.getWidth() / 2;
-            double enemyRight = enemyLeft + enemy.getWidth();
-            double enemyTop = enemy.getY() - enemy.getHeight() / 2;
-            double enemyBottom = enemyTop + enemy.getHeight();
+        } else if(scena == 1){  // Momento gaming
+            Square enemy;
 
-            // Coordinate del quadrato mouse
-            double mouseLeft = mouseX - mouseWidth / 2;
-            double mouseRight = mouseX + mouseWidth / 2;
-            double mouseTop = mouseY - mouseHeight / 2;
-            double mouseBottom = mouseY + mouseHeight / 2;
+            for(int i = 0; i < Enemies.size(); i++){
+                enemy = Enemies.get(i);
+                //? Devo controllare che il nemico sia dentro il quadrato del mouse, anche parzialmente
+    
+                // Coordinate del quadrato enemy
+                double enemyLeft = enemy.getX() - enemy.getWidth() / 2;
+                double enemyRight = enemyLeft + enemy.getWidth();
+                double enemyTop = enemy.getY() - enemy.getHeight() / 2;
+                double enemyBottom = enemyTop + enemy.getHeight();
+    
+                // Coordinate del quadrato mouse
+                double mouseLeft = mouseX - mouseWidth / 2;
+                double mouseRight = mouseX + mouseWidth / 2;
+                double mouseTop = mouseY - mouseHeight / 2;
+                double mouseBottom = mouseY + mouseHeight / 2;
+    
+                // Verifica collisione
+                collides = enemyRight >= mouseLeft && enemyLeft <= mouseRight && enemyBottom >= mouseTop && enemyTop <= mouseBottom;
+    
+                if(collides){
+                    enemy.TakeDamage(playerDamage);
+                }
+            }
+        } else if(scena == 2){  // Pausa
+            if(mouseX > xSpawnPause && mouseX < xSpawnPause + pauseWidth){
+                if(mouseY > ySpawnPause - pauseHeight - pauseSpaceBetweenRects && mouseY < ySpawnPause - pauseSpaceBetweenRects){   //? Primo rettangolo
+                    scena = 1;
+                    isPaused = false;
+                } else if(mouseY > ySpawnPause && mouseY < ySpawnPause + pauseHeight){ //? Secondo rettangolo
+                    scena = 0;
+                    isPaused = false;
+                } else if(mouseY > ySpawnPause + pauseHeight + pauseSpaceBetweenRects && mouseY < ySpawnPause + 2 * pauseHeight + pauseSpaceBetweenRects){    //? Terzo rettangolo
+                    GameWindow.jFrame.dispose();
+                }
+            }
+        } else if(scena == 3){  // Potenziamenti
 
-            // Verifica collisione
-            collides = enemyRight >= mouseLeft && enemyLeft <= mouseRight && enemyBottom >= mouseTop && enemyTop <= mouseBottom;
-
-            if(collides){
-                enemy.TakeDamage(playerDamage);
+        } else if(scena == 4){  // Morto
+            if(mouseX > xSpawnDeath && mouseX < xSpawnDeath + deathWidth){
+                if(mouseY > ySpawnDeath && mouseY < ySpawnDeath + deathHeight){   //? Primo rettangolo
+                    scena = 0;
+                    isPaused = false;
+                } else if(mouseY > ySpawnDeath + deathHeight + DeathSpaceBetweenRects && mouseY < ySpawnDeath + 2 * deathHeight + DeathSpaceBetweenRects){ //? Secondo rettangolo
+                    GameWindow.jFrame.dispose();
+                }
             }
         }
+        
     }
 
     private void InizializeAttributes(){    // Imposto ad originali tutte le variabili quando inizio a giocare
@@ -143,7 +216,29 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawMenu(Graphics g){
-        //? Tre pulsanti "Play", "Upgrades", "Quit Game"
+        //? Tre pulsanti "Play", "Upgrades", "Quit"
+
+        textSize = 60;
+        font = new Font("Arial", Font.PLAIN, textSize);
+        metrics = g.getFontMetrics(font);
+        g.setFont(font);
+
+        {   // Disegno i rettangoli
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(xSpawnMenu, ySpawnMenu - menuHeight - menuSpaceBetweenRects, menuWidth, menuHeight);
+        g.fillRect(xSpawnMenu, ySpawnMenu, menuWidth, menuHeight);
+        g.fillRect(xSpawnMenu, ySpawnMenu + menuHeight + menuSpaceBetweenRects, menuWidth, menuHeight);
+        }
+
+        {   // Disegno le scritte
+        g.setColor(Color.WHITE);
+        text = "Play";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu - menuHeight / 2 - menuSpaceBetweenRects + metrics.getHeight() / 3);
+        text = "Upgrades";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu + menuHeight / 2 + metrics.getHeight() / 3);
+        text = "Quit";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu + menuHeight * 3 / 2 + menuSpaceBetweenRects + metrics.getHeight() / 3);
+        }
     }
 
     private void DrawGame(Graphics g){
@@ -154,14 +249,32 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawPause(Graphics g){
-        int width = 100, height = 50;
         //? Tre semplici pulsanti con scritto "Resume", "Quit to title", "Quit Game"
 
         DrawEnemies(g);
         DrawPlayerLife(g);
 
-        g.setColor(Color.GRAY);
-        g.fillRect(panelWidth / 2 - width / 2, panelHeight / 2 - height / 2, width, height);
+        textSize = 60;
+        font = new Font("Arial", Font.PLAIN, textSize);
+        metrics = g.getFontMetrics(font);
+        g.setFont(font);
+
+        {   // Disegno i rettangoli
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(xSpawnPause, ySpawnPause - pauseHeight - pauseSpaceBetweenRects, pauseWidth, pauseHeight);
+        g.fillRect(xSpawnPause, ySpawnPause, pauseWidth, pauseHeight);
+        g.fillRect(xSpawnPause, ySpawnPause + pauseHeight + pauseSpaceBetweenRects, pauseWidth, pauseHeight);
+        }
+
+        {   // Disegno le scritte
+        g.setColor(Color.WHITE);
+        text = "Resume";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu - menuHeight / 2 - menuSpaceBetweenRects + metrics.getHeight() / 3);
+        text = "Quit to title";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu + menuHeight / 2 + metrics.getHeight() / 3);
+        text = "Quit Game";
+        g.drawString(text, xSpawnMenu + menuWidth / 2 - metrics.stringWidth(text) / 2, ySpawnMenu + menuHeight * 3 / 2 + menuSpaceBetweenRects + metrics.getHeight() / 3);
+        }
     }
 
     private void DrawUpgrades(Graphics g){
@@ -169,6 +282,7 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawDeathScreen(Graphics g){
+        {   //? Disegno la scritta "Sei Morto!"
         textSize = 48;
         font = new Font("Arial", Font.BOLD, textSize);
         metrics = g.getFontMetrics(font);
@@ -176,7 +290,23 @@ public class GamePanel extends JPanel {
 
         text = "Sei Morto!";
         g.setColor(Color.RED);
-        g.drawString(text, panelWidth / 2 - metrics.stringWidth(text) / 2, panelHeight / 2 - textSize / 2);
+        g.drawString(text, xSpawnDeath + deathWidth / 2 - metrics.stringWidth(text) / 2, ySpawnDeath - deathHeight / 2 - DeathSpaceBetweenRects + metrics.getHeight() / 3);
+        }
+
+        textSize = 60;
+        font = new Font("Arial", Font.PLAIN, textSize);
+        metrics = g.getFontMetrics(font);
+        g.setFont(font);
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(xSpawnDeath, ySpawnDeath, deathWidth, deathHeight);
+        g.fillRect(xSpawnDeath, ySpawnDeath + deathHeight + DeathSpaceBetweenRects, deathWidth, deathHeight);
+
+        g.setColor(Color.WHITE);
+        text = "Quit to title";
+        g.drawString(text, xSpawnDeath + deathWidth / 2 - metrics.stringWidth(text) / 2, ySpawnDeath + deathHeight / 2 + metrics.getHeight() / 3);
+        text = "Quit Game";
+        g.drawString(text, xSpawnDeath + deathWidth / 2 - metrics.stringWidth(text) / 2, ySpawnDeath + deathHeight * 3 / 2 + DeathSpaceBetweenRects + metrics.getHeight() / 3);
     }
 
     private void SpawnEnemies(Graphics g){
