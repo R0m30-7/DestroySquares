@@ -69,7 +69,7 @@ public class Square {
         //lifePoints = random.nextInt(maxLifePoints) + 1;
 
         // Imposto le velocità
-        speed = random.nextDouble(maxVel - minVel + 1) + minVel;
+        speed = random.nextDouble() * (maxVel - minVel + 1) + minVel;
         double theta = Math.atan2(yGoal - y, xGoal - x);
         velX = speed * Math.cos(theta);
         velY = speed * Math.sin(theta);
