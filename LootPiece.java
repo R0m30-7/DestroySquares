@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class LootPiece {
@@ -26,7 +27,7 @@ public class LootPiece {
         this.y = y;
     }
 
-    protected draw(Graphics g){
+    protected void Draw(Graphics g){
         g.drawImage(pieceLoot, (int) x, (int) y, null);
     }
 }
