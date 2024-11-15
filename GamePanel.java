@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
     //? Variabili player
     protected static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
     private static double playerDamage = 100;
-    private static int mouseWidth = 100, mouseHeight = 100;
+    protected static int mouseWidth = 100, mouseHeight = mouseWidth;
     protected static boolean dead = false;
 
     //? Font
@@ -77,7 +77,8 @@ public class GamePanel extends JPanel {
         switch (scena) {
             case 0: // Menù iniziale
                 DrawMenu(g);
-                Enemies.clear();;    //! Debug
+                Enemies.clear();    //! Debug
+                Loot.clear();
                 InizializeAttributes();
             break;
             case 1: // Momento gaming
@@ -150,6 +151,7 @@ public class GamePanel extends JPanel {
                     scena = 3;
                 } else if(mouseY > ySpawnMenu + menuHeight + menuSpaceBetweenRects && mouseY < ySpawnMenu + 2 * menuHeight + menuSpaceBetweenRects){    //? Terzo rettangolo
                     GameWindow.jFrame.dispose();
+                    // TODO Salvataggio dei dati
                 }
             }
 
@@ -189,6 +191,7 @@ public class GamePanel extends JPanel {
                     isPaused = false;
                 } else if(mouseY > ySpawnPause + pauseHeight + pauseSpaceBetweenRects && mouseY < ySpawnPause + 2 * pauseHeight + pauseSpaceBetweenRects){    //? Terzo rettangolo
                     GameWindow.jFrame.dispose();
+                    // TODO Salvataggio dei dati
                 }
             }
         } else if(scena == 3){  // Potenziamenti
@@ -200,6 +203,7 @@ public class GamePanel extends JPanel {
                     isPaused = false;
                 } else if(mouseY > ySpawnDeath + deathHeight + DeathSpaceBetweenRects && mouseY < ySpawnDeath + 2 * deathHeight + DeathSpaceBetweenRects){ //? Secondo rettangolo
                     GameWindow.jFrame.dispose();
+                    // TODO Salvataggio dei dati
                 }
             }
         }
@@ -238,6 +242,7 @@ public class GamePanel extends JPanel {
     }
 
     private void DrawGame(Graphics g){
+        UpdateParticleLoot(g);
         DrawEnemies(g);
         DrawMouseRectangle(g);
         MoveEnemies(g);
@@ -317,12 +322,11 @@ public class GamePanel extends JPanel {
                 Enemies.get(i).draw(g);
             }
         }
-        DrawParticleLoot(g);
     }
 
-    private void DrawParticleLoot(Graphics g){
+    private void UpdateParticleLoot(Graphics g){
         for(int i = 0; i < Loot.size(); i++){
-            Loot.get(i).Draw(g);
+            Loot.get(i).Update(g, i);
         }
     }
 
