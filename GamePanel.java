@@ -3,7 +3,6 @@ package DestroySquares;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -323,7 +322,7 @@ public class GamePanel extends JPanel {
 
     private void DrawParticleLoot(Graphics g){
         for(int i = 0; i < Loot.size(); i++){
-            Loot.get(i).draw(g);
+            Loot.get(i).Draw(g);
         }
     }
 
