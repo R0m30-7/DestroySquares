@@ -1,16 +1,12 @@
 package DestroySquares;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.MouseInfo;
+import java.awt.*;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.awt.FontMetrics;
-import java.awt.Font;
-
-import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
 
@@ -32,6 +28,7 @@ public class GamePanel extends JPanel {
     */
 
     private static List<Square> Enemies = new ArrayList<>();
+    protected static List<LootPiece> Loot = new ArrayList<>();
 
     //? Variabili player
     protected static double playerMaxHealth = 100, playerHealth = playerMaxHealth;
@@ -320,6 +317,13 @@ public class GamePanel extends JPanel {
             } else{
                 Enemies.get(i).draw(g);
             }
+        }
+        DrawParticleLoot(g);
+    }
+
+    private void DrawParticleLoot(Graphics g){
+        for(int i = 0; i < Loot.size(); i++){
+            Loot.get(i).draw(g);
         }
     }
 
