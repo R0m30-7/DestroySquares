@@ -13,6 +13,7 @@ public class Square {
     private double maxVel = 100, minVel = 38;
 
     private int width, height;
+    private int maxLootPieces = 4;
 
     private double lifePoints, maxLifePoints;
     private double squareDamage;
@@ -65,7 +66,7 @@ public class Square {
         // Imposto la vita e il danno del quadrato quando viene hittato
         maxLifePoints = 100;
         lifePoints = maxLifePoints;
-        squareDamage = 10;
+        squareDamage = 5;
         //lifePoints = random.nextInt(maxLifePoints) + 1;
 
         // Imposto le velocità
@@ -76,8 +77,16 @@ public class Square {
     }
 
     private void DropLoot(Graphics g){  //TODO Droppare loot
-        System.out.println("Droppo loot");
-        GamePanel.Loot.add(new LootPiece(x, y));
+        //! System.out.println("Droppo loot");
+        Random random = new Random();
+        int lootPieces = 0;
+        if(random.nextInt(5) >= 2){
+            lootPieces = random.nextInt(maxLootPieces + 1);
+        }
+        
+        for(int i = 0; i < lootPieces; i++){
+            GamePanel.Loot.add(new LootPiece(x, y));
+        }
     }
 
     private void CheckForDespawn(){
