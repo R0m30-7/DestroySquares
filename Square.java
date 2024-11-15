@@ -77,6 +77,7 @@ public class Square {
 
     private void DropLoot(Graphics g){  //TODO Droppare loot
         System.out.println("Droppo loot");
+        GamePanel.Loot.add(new LootPiece(x, y));
     }
 
     private void CheckForDespawn(){
@@ -152,5 +153,9 @@ public class Square {
 
     public int getHeight() {
         return height;
+    }
+
+    public double getLifePoints() {
+        return lifePoints;
     }
 }
