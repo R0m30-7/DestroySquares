@@ -1,7 +1,7 @@
 package DestroySquares;
 
 import java.awt.*;
-import java.swing.*;
+//import java.swing.*;
 
 public class Game implements Runnable {
 
